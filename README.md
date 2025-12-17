@@ -1,7 +1,8 @@
-# Contextmoji 🧠✨
+
+# Contextmoji Studio 🧠✨
 **Tone-aware emoji insertion for social posts — professional when needed, playful when allowed.**
 
-Contextmoji takes your draft text and generates:
+Contextmoji Studio takes your draft text and generates:
 1) **Emoji suggestions** that match your content and platform tone  
 2) An **auto-inserted output** with emojis placed where they make sense  
 3) **Multiple rewritten variations** designed to unlock better emoji opportunities  
@@ -11,15 +12,15 @@ Contextmoji takes your draft text and generates:
 
 ---
 
-## Why Contextmoji?
+## Why Contextmoji Studio?
 Emoji tools usually do “keyword → emoji.” That’s not enough.
-Contextmoji is designed for **context**, **tone**, and **audience expectations**:
+Contextmoji Studio is designed for **context**, **tone**, and **audience expectations**:
 - A thoughtful LinkedIn post should not get 😜😂😍
 - An X post may benefit from punchy 🔥⚡️📌
 - A product launch might want 🚀📣✅
 - A security post might prefer 🛡️🔐📉
 
-Contextmoji makes emoji placement feel **intentional**, not random.
+Contextmoji Studio makes emoji placement feel **intentional**, not random.
 
 ---
 
@@ -67,7 +68,7 @@ Contextmoji makes emoji placement feel **intentional**, not random.
 ---
 
 ## Quickstart
-> This README is implementation-agnostic. You can build Contextmoji as:
+> This README is implementation-agnostic. You can build Contextmoji Studio as:
 - a web app (Next.js / React)
 - a CLI tool
 - a browser extension

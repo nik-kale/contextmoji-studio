@@ -1,24 +1,22 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
-import { Platform, GeminiResponse } from "./types";
+import { Platform, GeminiResponse, ImageStyle, ImageSize, ColorPalette, AspectRatio } from "./types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+const genAI = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
 
 export const processTextWithEmoji = async (
   text: string,
   platform: Platform,
   emojiCount: number
 ): Promise<GeminiResponse> => {
-  const response = await ai.models.generateContent({
+  const response = await genAI.models.generateContent({
     model: "gemini-3-flash-preview",
     contents: `You are an expert social media copywriter for ${platform}.
     
     TASK:
     1. Take the provided text and insert EXACTLY ${emojiCount} emojis into it.
-    2. The placement must feel natural and match the professional/casual tone of ${platform}.
-    3. For LinkedIn: Use professional, non-face emojis (e.g., 🚀, 📈, ✅, 💡).
-    4. For X/Threads: Use high-energy, trending emojis.
-    5. Provide 2 variations of the text rewritten to be more viral/engaging for ${platform}, also using EXACTLY ${emojiCount} emojis.
+    2. Place emojis naturally at the end of sentences or near key claims.
+    3. Variations should be engaging and platform-specific.
 
     INPUT TEXT: "${text}"`,
     config: {
@@ -47,4 +45,46 @@ export const processTextWithEmoji = async (
   });
 
   return JSON.parse(response.text || '{}') as GeminiResponse;
+};
+
+export const generatePostImageVariation = async (
+  postText: string,
+  style: ImageStyle,
+  size: ImageSize,
+  palette: ColorPalette,
+  aspectRatio: AspectRatio,
+  customHex?: string
+): Promise<string> => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+  
+  const paletteDescription = palette === ColorPalette.CUSTOM && customHex 
+    ? `strictly using the hex color ${customHex}` 
+    : `following a ${palette} color scheme`;
+
+  const prompt = `Create a high-quality ${style} visual for this social post: "${postText}".
+  Design parameters: 
+  - Style: ${style}
+  - Palette: ${paletteDescription}
+  - Resolution requirement: High fidelity, appealing for professional feeds.
+  ${style === ImageStyle.INFOGRAPHIC ? 'Focus on data-driven design.' : ''}
+  No heavy text.`;
+
+  const response = await ai.models.generateContent({
+    model: 'gemini-3-pro-image-preview',
+    contents: { parts: [{ text: prompt }] },
+    config: {
+      imageConfig: {
+        aspectRatio: aspectRatio as any,
+        imageSize: size as any,
+      }
+    },
+  });
+
+  for (const part of response.candidates?.[0]?.content?.parts || []) {
+    if (part.inlineData) {
+      return `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+    }
+  }
+
+  throw new Error("Variation failed");
 };

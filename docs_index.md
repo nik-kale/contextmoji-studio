@@ -1,124 +1,36 @@
-# Contextmoji Documentation
+
+# Contextmoji Studio Documentation
 
 ## Overview
-Contextmoji is a tone-aware emoji insertion system for social posts. It helps you:
-- generate high-quality emoji suggestions based on intent + content
-- automatically insert emojis without damaging readability
-- produce rewritten versions that unlock better emoji placement
-- adapt output to platform norms (LinkedIn vs X vs Threads vs Bluesky)
+Contextmoji Studio is a high-fidelity emoji insertion and visual generation system for social media professionals. It optimizes for specific platform norms while maintaining brand consistency through AI-driven context analysis.
 
 ---
 
-## Key concepts
+## Core Systems
 
-### Platform
-The platform changes what “appropriate” means.
-- **LinkedIn**: restrained, high-signal, professional
-- **X**: punchy, concise, expressive
-- **Threads/Bluesky**: conversational, moderate expressiveness
+### 1. The Multi-Visual Engine
+Unlike standard generators, Contextmoji Studio creates a **Gallery of Variations**. 
+- **Style**: Select from Professional, Abstract, Realistic, or Infographic.
+- **Aspect Ratios**: Native support for 1:1, 16:9 (X/LinkedIn), and 9:16 (Threads).
+- **Brand Consistency**: Signed-in users can toggle **Brand Mode** to force the AI to adhere to a specific Hex color code across all generations.
 
-### Tone
-Tone can be:
-- `professional`
-- `neutral`
-- `casual`
-- `playful`
-- `auto` (recommended)
-
-Tone influences emoji selection and placement rules.
-
-### Emoji density (budget)
-Density is controlled via `emoji_count` and `mode`:
-- `light`: lower density, emphasis-only
-- `balanced`: readable + expressive
-- `rich`: higher density (still constrained)
+### 2. The Hybrid Billing System
+Contextmoji Studio utilizes a flexible credit system to ensure everyone can access high-quality AI:
+- **Free Tier**: 10 monthly credits for text + visual generation.
+- **Pro Tier**: Unlimited platform-hosted generations + 4K resolution + Brand Mode features.
+- **BYOK (Bring Your Own Key)**: Link your personal Google Gemini API Key. This unlocks all Pro features for free as you are paying Google directly for the underlying compute.
 
 ---
 
-## Inputs and outputs
+## Technical Details
 
-### Input: draft text
-A user provides:
-- text content (the post)
-- target platform
-- optional tone override
-- emoji count / insertion mode
-- constraints (avoid faces, avoid flags, etc.)
+### Credits Consumption
+- **Emoji Analysis**: 0.2 Credits
+- **Image Variation Set (3-5 images)**: 1 Credit
+- **BYOK Mode**: 0 Credits (Unlimited)
 
-### Output: three layers
-Contextmoji returns:
-1. **Suggestions**: emoji candidates + reasoning
-2. **Inserted variants**: multiple formatted outputs
-3. **Rewrites**: alternative drafts designed for better emoji fit
+### Custom Hex Matching
+When Brand Mode is active, the system injects strict color directives into the Gemini-3-Pro-Image-Preview model to ensure visual outputs align with your corporate style guide.
 
 ---
-
-## Emoji selection logic
-
-### 1) Intent detection
-Contextmoji infers the post’s intent:
-- product update
-- launch / announcement
-- educational / how-to
-- opinion / thought leadership
-- hiring / recruiting
-- incident / postmortem
-- congratulations / recognition
-
-### 2) Topic detection
-Topics influence emoji mapping:
-- AI/ML → 🧠🧪🤖 (platform/tone gated)
-- Security → 🛡️🔐🚨 (🚨 gated for serious incidents)
-- Performance / metrics → 📈📉⚡️
-- Process / tooling → 🛠️⚙️
-- Learning / documentation → 📚📝
-
-### 3) Constraint filtering
-Then it filters candidates based on:
-- platform rules
-- tone rules
-- user constraints:
-  - `avoid_faces`
-  - `avoid_flags`
-  - `avoid_sensitive`
-  - `avoid_negative`
-
----
-
-## Proposed API
-
-### POST /v1/compose
-**Purpose:** Generate suggestions + inserted variants + rewrites.
-
-**Request**
-```json
-{
-  "text": "string",
-  "platform": "linkedin | x | threads | bluesky",
-  "tone": "auto | professional | neutral | casual | playful",
-  "emoji_count": 0,
-  "mode": "light | balanced | rich",
-  "constraints": {
-    "avoid_faces": true,
-    "avoid_flags": true,
-    "avoid_sensitive": true
-  },
-  "output": {
-    "variants": 3,
-    "rewrites": 3
-  }
-}
-```
-
----
-
-## FAQ
-
-**Does this require an LLM?**
-Not necessarily. You can implement deterministic intent/topic classifiers + emoji mapping tables. However, this app uses Gemini for semantic depth.
-
-**Can it work offline?**
-Yes, with local embeddings and rewrite templates.
-
----
-Built for precision copywriters by Nik Kale.
+Built for precision copywriters by Nik Kale. 2026.
