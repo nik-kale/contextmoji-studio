@@ -1,0 +1,5 @@
+{
+  "name": "Contextmoji",
+  "description": "An AI-powered emoji inserter that intelligently contextualizes your social media posts for LinkedIn, X, Threads, and more. It suggests platform-appropriate emojis and text variations to maximize engagement.",
+  "requestFramePermissions": []
+}
