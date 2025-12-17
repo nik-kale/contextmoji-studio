@@ -3,9 +3,15 @@ export enum Platform {
   X = 'X (Twitter)',
   LINKEDIN = 'LinkedIn',
   THREADS = 'Threads',
-  BLUE_SKY = 'Blue Sky',
-  SLACK = 'Slack',
-  CASUAL = 'Casual'
+  BLUE_SKY = 'BlueSky',
+  FACEBOOK = 'Facebook',
+  BRUT_SOCIAL = 'Brut Social'
+}
+
+export enum TextDensity {
+  CONCISE = 'Concise',
+  BALANCED = 'Balanced',
+  DETAILED = 'Detailed'
 }
 
 export enum ImageStyle {

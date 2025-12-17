@@ -1,22 +1,27 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
-import { Platform, GeminiResponse, ImageStyle, ImageSize, ColorPalette, AspectRatio } from "./types";
-
-const genAI = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+import { Platform, GeminiResponse, ImageStyle, ImageSize, ColorPalette, AspectRatio, TextDensity } from "./types";
 
 export const processTextWithEmoji = async (
   text: string,
   platform: Platform,
-  emojiCount: number
+  emojiCount: number,
+  textDensity: TextDensity
 ): Promise<GeminiResponse> => {
-  const response = await genAI.models.generateContent({
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+  
+  const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
     contents: `You are an expert social media copywriter for ${platform}.
     
     TASK:
     1. Take the provided text and insert EXACTLY ${emojiCount} emojis into it.
-    2. Place emojis naturally at the end of sentences or near key claims.
-    3. Variations should be engaging and platform-specific.
+    2. Adjust text density to be: ${textDensity}.
+       - Concise: Strip filler words, focus on ultra-punchy hooks, keep it under 200 characters if possible.
+       - Balanced: Maintain original meaning but polish for readability and flow.
+       - Detailed: Expand slightly on key points for depth, better for platforms like LinkedIn.
+    3. Place emojis naturally (end of sentences or as line-starters for list items).
+    4. Provide 2 additional creative rewrites that adapt the core message for ${platform}.
 
     INPUT TEXT: "${text}"`,
     config: {
@@ -65,9 +70,9 @@ export const generatePostImageVariation = async (
   Design parameters: 
   - Style: ${style}
   - Palette: ${paletteDescription}
-  - Resolution requirement: High fidelity, appealing for professional feeds.
-  ${style === ImageStyle.INFOGRAPHIC ? 'Focus on data-driven design.' : ''}
-  No heavy text.`;
+  - Resolution requirement: High fidelity, professional lighting/textures.
+  ${style === ImageStyle.INFOGRAPHIC ? 'Focus on data-driven design elements.' : ''}
+  Do not include generic stock characters; aim for bespoke digital art.`;
 
   const response = await ai.models.generateContent({
     model: 'gemini-3-pro-image-preview',
@@ -86,5 +91,5 @@ export const generatePostImageVariation = async (
     }
   }
 
-  throw new Error("Variation failed");
+  throw new Error("Variation failed. Ensure your API Key is correctly set.");
 };
